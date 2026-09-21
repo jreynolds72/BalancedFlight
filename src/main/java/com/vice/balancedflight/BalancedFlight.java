@@ -21,7 +21,9 @@ import lombok.experimental.ExtensionMethod;
 import net.createmod.catnip.lang.FontHelper;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -41,7 +43,8 @@ import org.apache.logging.log4j.Logger;
 public class BalancedFlight {
     public static final String MODID = "balancedflight";
     public static final Logger LOGGER = LogManager.getLogger();
-    public static final CreateRegistrate CREATE_REGISTRATE = com.simibubi.create.foundation.data.CreateRegistrate.create(BalancedFlight.MODID);
+    public static final CreateRegistrate CREATE_REGISTRATE = com.simibubi.create.foundation.data.CreateRegistrate.create(BalancedFlight.MODID)
+            .defaultCreativeTab((ResourceKey<CreativeModeTab>) null);
 
     public static final BlockEntry<? extends Block> FLIGHT_ANCHOR_BLOCK = BalancedFlight.CREATE_REGISTRATE
             .object("flight_anchor")

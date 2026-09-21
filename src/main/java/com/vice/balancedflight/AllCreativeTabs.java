@@ -4,10 +4,14 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class AllCreativeTabs
@@ -21,8 +25,10 @@ public class AllCreativeTabs
                     .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
                     .icon(BalancedFlight.FLIGHT_ANCHOR_BLOCK::asStack)
                     .displayItems(((pParameters, pOutput) -> {
+                        Set<Item> added = new HashSet<>();
                         for (var item : BalancedFlight.CREATE_REGISTRATE.getAll(Registries.ITEM))
-                            pOutput.accept(new ItemStack(item.get()));
+                            if (added.add(item.get()))
+                                pOutput.accept(new ItemStack(item.get()));
                     }))
                     .build());
 

@@ -23,9 +23,6 @@ public class AllCreativeTabs
                     .displayItems(((pParameters, pOutput) -> {
                         for (var item : BalancedFlight.CREATE_REGISTRATE.getAll(Registries.ITEM))
                             pOutput.accept(new ItemStack(item.get()));
-
-                        for (var block : BalancedFlight.CREATE_REGISTRATE.getAll(Registries.BLOCK))
-                            pOutput.accept(new ItemStack(block.get()));
                     }))
                     .build());
 

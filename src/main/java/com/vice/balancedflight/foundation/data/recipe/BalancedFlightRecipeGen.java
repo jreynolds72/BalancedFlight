@@ -1,44 +1,43 @@
 package com.vice.balancedflight.foundation.data.recipe;
 
-import com.simibubi.create.Create;
+import com.simibubi.create.api.data.recipe.MechanicalCraftingRecipeGen;
 import com.simibubi.create.content.kinetics.deployer.DeployerApplicationRecipe;
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyRecipeBuilder;
-import com.simibubi.create.foundation.data.recipe.*;
-import com.simibubi.create.api.data.recipe.*;
 import com.vice.balancedflight.BalancedFlight;
-import net.createmod.catnip.platform.CatnipServices;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Supplier;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.UnaryOperator;
 
 public class BalancedFlightRecipeGen extends MechanicalCraftingRecipeGen {
     GeneratedRecipe ASCENDED_FLIGHT_RING;
     GeneratedRecipe FLIGHT_ANCHOR;
 
-    public BalancedFlightRecipeGen(PackOutput dataGenerator) {
-        super(dataGenerator, BalancedFlight.MODID);
+    public BalancedFlightRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+        super(output, registries, BalancedFlight.MODID);
 
-        ASCENDED_FLIGHT_RING = mechanicalCrafting(BalancedFlight.ASCENDED_FLIGHT_RING::get, 1, "", (b) -> b
-                .key('G', Ingredient.of(Blocks.GOLD_BLOCK))
-                .key('B', Ingredient.of(Blocks.NETHERITE_BLOCK))
-                .key('S', Ingredient.of(Items.NETHERITE_INGOT))
-                .key('N', Ingredient.of(Items.NETHER_STAR))
-                .key('E', Ingredient.of(Items.ELYTRA))
-                .patternLine(" GGGGG ")
-                .patternLine("GGGNGGG")
-                .patternLine("GGBSBGG")
-                .patternLine("GNSESNG")
-                .patternLine("GGBSBGG")
-                .patternLine("GGGNGGG")
-                .patternLine(" GGGGG ")
-                .disallowMirrored());
+        ASCENDED_FLIGHT_RING = create(BalancedFlight.ASCENDED_FLIGHT_RING::get)
+                .recipe((b) -> b
+                        .key('G', Ingredient.of(Blocks.GOLD_BLOCK))
+                        .key('B', Ingredient.of(Blocks.NETHERITE_BLOCK))
+                        .key('S', Ingredient.of(Items.NETHERITE_INGOT))
+                        .key('N', Ingredient.of(Items.NETHER_STAR))
+                        .key('E', Ingredient.of(Items.ELYTRA))
+                        .patternLine(" GGGGG ")
+                        .patternLine("GGGNGGG")
+                        .patternLine("GGBSBGG")
+                        .patternLine("GNSESNG")
+                        .patternLine("GGBSBGG")
+                        .patternLine("GGGNGGG")
+                        .patternLine(" GGGGG ")
+                        .disallowMirrored());
 
         FLIGHT_ANCHOR = sequencedAssembly(BalancedFlight.FLIGHT_ANCHOR_BLOCK.getId(), (b) -> b
                 .require(Blocks.BEACON)
@@ -57,18 +56,8 @@ public class BalancedFlightRecipeGen extends MechanicalCraftingRecipeGen {
         return "Balanced Flights's Crafting Recipes";
     }
 
-    GeneratedRecipe mechanicalCrafting(Supplier<ItemLike> result, int amount, String suffix, UnaryOperator<MechanicalCraftingRecipeBuilder> builder) {
-        return register(consumer -> {
-            MechanicalCraftingRecipeBuilder b = builder.apply(MechanicalCraftingRecipeBuilder.shapedRecipe(result.get(), amount));
-            ResourceLocation location = Create.asResource("mechanical_crafting/" + CatnipServices.REGISTRIES.getKeyOrThrow(result.get().asItem()).getPath() + suffix);
-            b.build(consumer, location);
-        });
-    }
-
     protected GeneratedRecipe sequencedAssembly(ResourceLocation resource, UnaryOperator<SequencedAssemblyRecipeBuilder> transform) {
-        GeneratedRecipe generatedRecipe = (c) -> {
-            transform.apply(new SequencedAssemblyRecipeBuilder(resource)).build(c);
-        };
+        GeneratedRecipe generatedRecipe = (output) -> transform.apply(new SequencedAssemblyRecipeBuilder(resource)).build(output);
         this.all.add(generatedRecipe);
         return generatedRecipe;
     }

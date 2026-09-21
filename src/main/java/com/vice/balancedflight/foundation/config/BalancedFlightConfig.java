@@ -1,17 +1,14 @@
 package com.vice.balancedflight.foundation.config;
 
-import com.electronwill.nightconfig.core.file.CommentedFileConfig;
-import com.electronwill.nightconfig.core.io.WritingMode;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.loading.FMLPaths;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
-import java.nio.file.Path;
-
-import static net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
+import static net.neoforged.neoforge.common.ModConfigSpec.ConfigValue;
 
 public class BalancedFlightConfig
 {
-    public static ForgeConfigSpec ConfigSpec;
+    public static ModConfigSpec ConfigSpec;
 
     public static ConfigValue<Boolean> enableElytraFlightFromGround;
     public static ConfigValue<Boolean> enableTakeOff;
@@ -59,17 +56,7 @@ public class BalancedFlightConfig
         ConfigSpec = builder.Save();
     }
 
-    public static void init() {
-        if (ConfigSpec.isLoaded())
-            return;
-
-        loadConfig(FMLPaths.CONFIGDIR.get().resolve("balanced_flight.toml"));
-    }
-
-    private static void loadConfig(Path path) {
-        final CommentedFileConfig configData = CommentedFileConfig.builder(path).sync().autosave().writingMode(WritingMode.REPLACE).build();
-
-        configData.load();
-        ConfigSpec.setConfig(configData);
+    public static void init(ModContainer modContainer) {
+        modContainer.registerConfig(ModConfig.Type.COMMON, ConfigSpec, "balanced_flight.toml");
     }
 }

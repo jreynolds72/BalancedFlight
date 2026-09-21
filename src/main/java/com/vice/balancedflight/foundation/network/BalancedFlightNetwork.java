@@ -1,34 +1,20 @@
 package com.vice.balancedflight.foundation.network;
 
-import com.vice.balancedflight.BalancedFlight;
-
-import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 public class BalancedFlightNetwork
 {
-    public static SimpleChannel INSTANCE;
-    public static final String VERSION = "1.0";
-    private static int ID = 0;
+    public static final String VERSION = "1";
 
-    public static int nextID() {
-        return ID++;
+    public static void registerMessage(RegisterPayloadHandlersEvent event) {
+        PayloadRegistrar registrar = event.registrar(VERSION);
+
+        registrar.playToServer(FireRocketPacket.TYPE, FireRocketPacket.STREAM_CODEC, FireRocketPacket::handle);
     }
 
-    public static void registerMessage() {
-        INSTANCE = NetworkRegistry.newSimpleChannel(
-                new ResourceLocation(BalancedFlight.MODID, "main_network"),
-                () -> VERSION,
-                (version) -> version.equals(VERSION),
-                (version) -> version.equals(VERSION)
-        );
-
-        INSTANCE.messageBuilder(CustomNetworkMessage.class, nextID())
-                .encoder(CustomNetworkMessage::toBytes)
-                .decoder(CustomNetworkMessage::new)
-                .consumerNetworkThread(CustomNetworkMessage::handler)
-                .add();
+    public static void sendFireRocket() {
+        PacketDistributor.sendToServer(FireRocketPacket.INSTANCE);
     }
 }
-

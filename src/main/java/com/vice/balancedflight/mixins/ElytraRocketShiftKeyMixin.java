@@ -3,9 +3,8 @@ package com.vice.balancedflight.mixins;
 
 import com.vice.balancedflight.content.flightAnchor.FlightController;
 import com.vice.balancedflight.foundation.config.BalancedFlightConfig;
-import com.vice.balancedflight.foundation.network.CustomNetworkMessage;
+import com.vice.balancedflight.foundation.network.BalancedFlightNetwork;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -31,12 +30,10 @@ public class ElytraRocketShiftKeyMixin
 
             if (player.isSprinting() && player.input.hasForwardImpulse())
             {
-                Level world = player.level();
-
                 long now = Instant.now().getEpochSecond();
                 if (now - LastUsedFireworkTime > 1)
                 {
-                    CustomNetworkMessage.Send(world, player, "FIRE_ROCKET");
+                    BalancedFlightNetwork.sendFireRocket();
                     LastUsedFireworkTime = now;
                 }
             }
@@ -44,5 +41,3 @@ public class ElytraRocketShiftKeyMixin
         }
     }
 }
-
-

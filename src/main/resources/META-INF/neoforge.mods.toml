@@ -1,0 +1,52 @@
+modLoader = "javafml" #mandatory
+loaderVersion = "[0,)" #mandatory
+license = "MIT License"
+issueTrackerURL = "https://github.com/viceversagames/BalancedFlight/issues" #optional
+
+[[mods]] #mandatory
+modId = "balancedflight" #mandatory
+version = "${file.jarVersion}"
+displayName = "Create: Balanced Flight" #mandatory
+displayURL = "https://github.com/viceversagames/BalancedFlight" #optional
+logoFile = "examplemod.png" #optional
+credits = "" #optional
+authors = "Vice" #optional
+description = "This mod adds an Angel Ring, which allows you to fly, like in a creative mode."
+
+[[mixins]]
+config = "balancedflight.mixins.json"
+
+[[dependencies.balancedflight]]
+    modId = "neoforge"
+    type = "required"
+    versionRange = "[21.1.0,)"
+    ordering = "NONE"
+    side = "BOTH"
+
+[[dependencies.balancedflight]]
+    modId = "minecraft"
+    type = "required"
+    versionRange = "[1.21.1,1.21.2)"
+    ordering = "NONE"
+    side = "BOTH"
+
+[[dependencies.balancedflight]]
+    modId = "curios"
+    type = "required"
+    versionRange = "[9.0.0,)"
+    ordering = "AFTER"
+    side = "BOTH"
+
+[[dependencies.balancedflight]]
+    modId = "create"
+    type = "required"
+    versionRange = "[6.0.0,)"
+    ordering = "AFTER"
+    side = "BOTH"
+
+[[dependencies.balancedflight]]
+    modId = "geckolib"
+    type = "required"
+    versionRange = "[4.9,)"
+    ordering = "AFTER"
+    side = "BOTH"

@@ -20,13 +20,12 @@ public class FlightAnchorBeamRenderer implements BlockEntityRenderer<FlightAncho
         pPoseStack.pushPose();
         pPoseStack.translate(-0.5D, 0, -0.5D);
 
-        long i = pBlockEntity.getLevel().getGameTime();
         List<BeaconBlockEntity.BeaconBeamSection> list = pBlockEntity.getBeamSections();
         int j = 0;
 
         for(int k = 0; k < list.size(); ++k) {
             BeaconBlockEntity.BeaconBeamSection beaconblockentity$beaconbeamsection = list.get(k);
-            BeaconRenderer.renderBeaconBeam(pPoseStack, pBufferSource, AnimationTickHolder.getPartialTicks(pBlockEntity.getLevel()), AnimationTickHolder.getTicks(pBlockEntity.getLevel()), j, k == list.size() - 1 ? 1024 : beaconblockentity$beaconbeamsection.getHeight(), beaconblockentity$beaconbeamsection.getColor());
+            BeaconRenderer.renderBeaconBeam(pPoseStack, pBufferSource, BeaconRenderer.BEAM_LOCATION, AnimationTickHolder.getPartialTicks(pBlockEntity.getLevel()), 1.0F, AnimationTickHolder.getTicks(pBlockEntity.getLevel()), j, k == list.size() - 1 ? 1024 : beaconblockentity$beaconbeamsection.getHeight(), beaconblockentity$beaconbeamsection.getColor(), 0.2F, 0.25F);
             j += beaconblockentity$beaconbeamsection.getHeight();
         }
 

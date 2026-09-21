@@ -1,12 +1,15 @@
 package com.vice.balancedflight;
 
 import net.createmod.ponder.foundation.PonderIndex;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 
+@Mod(value = BalancedFlight.MODID, dist = Dist.CLIENT)
 public class BalancedFlightClient
 {
-    public static void onCtorClient(IEventBus modEventBus, IEventBus forgeEventBus) {
+    public BalancedFlightClient(IEventBus modEventBus) {
         modEventBus.addListener(BalancedFlightClient::clientInit);
     }
 

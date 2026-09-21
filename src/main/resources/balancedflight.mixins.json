@@ -1,8 +1,7 @@
 {
   "required": true,
   "package": "com.vice.balancedflight.mixins",
-  "compatibilityLevel": "JAVA_8",
-  "refmap": "balancedflight.refmap.json",
+  "compatibilityLevel": "JAVA_21",
   "plugin": "com.vice.balancedflight.mixins.BalancedFlightMixinPlugin",
   "mixins": [
     "ElytraServerMixin",

@@ -19,7 +19,6 @@ import com.vice.balancedflight.foundation.config.BalancedFlightConfig;
 import com.vice.balancedflight.foundation.data.recipe.BalancedFlightRecipeGen;
 import lombok.experimental.ExtensionMethod;
 import net.createmod.catnip.lang.FontHelper;
-import net.createmod.ponder.foundation.PonderIndex;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
@@ -28,14 +27,12 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.data.event.GatherDataEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -70,21 +67,15 @@ public class BalancedFlight {
             .initialProperties(() -> new Item.Properties().stacksTo(1))
             .register();
 
-    public BalancedFlight() {
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
-
+    public BalancedFlight(IEventBus modEventBus, ModContainer modContainer) {
         CREATE_REGISTRATE.registerEventListeners(modEventBus);
 
-        BalancedFlightConfig.init();
-        MinecraftForge.EVENT_BUS.register(this);
+        BalancedFlightConfig.init(modContainer);
 
         AllLangMessages.init();
         AllCreativeTabs.register(modEventBus);
 
         modEventBus.addListener(EventPriority.LOWEST, BalancedFlight::gatherData);
-
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> BalancedFlightClient.onCtorClient(modEventBus, forgeEventBus));
     }
 
     public static void gatherData(GatherDataEvent event) {
@@ -96,7 +87,7 @@ public class BalancedFlight {
         DataGenerator gen = event.getGenerator();
         PackOutput output = gen.getPackOutput();
         if (event.includeServer()) {
-            gen.addProvider(true, new BalancedFlightRecipeGen(output));
+            gen.addProvider(true, new BalancedFlightRecipeGen(output, event.getLookupProvider()));
         }
     }
 

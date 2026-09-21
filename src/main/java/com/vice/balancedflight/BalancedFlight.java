@@ -78,15 +78,18 @@ public class BalancedFlight {
         AllLangMessages.init();
         AllCreativeTabs.register(modEventBus);
 
+        modEventBus.addListener(EventPriority.HIGHEST, BalancedFlight::gatherDataHighPriority);
         modEventBus.addListener(EventPriority.LOWEST, BalancedFlight::gatherData);
     }
 
-    public static void gatherData(GatherDataEvent event) {
+    public static void gatherDataHighPriority(GatherDataEvent event) {
         CREATE_REGISTRATE.addDataGenerator(ProviderType.LANG, prov -> {
             prov.add(AllCreativeTabs.CREATIVE_TAB.get(), "Create: Balanced Flight");
             prov.add("curios.identifier.flight_ring", "Flight Ring");
         });
+    }
 
+    public static void gatherData(GatherDataEvent event) {
         DataGenerator gen = event.getGenerator();
         PackOutput output = gen.getPackOutput();
         if (event.includeServer()) {
